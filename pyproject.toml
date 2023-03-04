@@ -60,3 +60,13 @@ exclude_lines = [
   "__author__",
   "def run",
 ]
+
+[tool.taskipy.tasks]
+clean = { cmd = "echo -n 'Starting cleanning environment..'; find ./ \\( -name '*.pyc' -o -name '*~' -o -name '*.log' -o -name '*.log.*' -o -name '.cache' \\) -delete ; echo ' ok' ",  help = "Shallow clean into environment (.pyc, .cache, .egg, .log, et all)" }
+isort = { help = "Apply code style isort format", cmd = 'poetry run isort $(DIRECTORIES) && git commit -m "style(lint): Applied Code style isort automaticly at `date +"%FT%T%z"`" . || echo ">>>  Checked code style isort format automaticly  <<<"'}
+lint = { cmd = "pylint tests taskipy",   help = "confirms code style using pylint" }
+test = { cmd = "pytest tests/test_*.py", help = "runs all unit tests" }
+prerelease = {help='Update prerelease version', cmd='v=$(poetry version prerelease); pytest tests/ && git ci -m "$v" pyproject.toml `find incolume* -name version.txt`'}
+preminor = {help='Update preminor version', cmd='v=$(poetry version preminor); pytest tests/ && git ci -m "$v" pyproject.toml `find incolume* -name version.txt`'}
+premajor = {help='Update premajor version', cmd='v=$(poetry version premajor); pytest tests/ && git ci -m "$v" pyproject.toml `find incolume* -name version.txt`'}
+patch = {help='Update patch version', cmd='v=$(poetry version patch); pytest tests/ && git ci -m "$v" pyproject.toml `find incolume* -name version.txt`'}
