@@ -9,14 +9,12 @@ packages = [{include = "incolume"}]
 [tool.poetry.dependencies]
 python = "^3.10"
 
-
 [tool.poetry.group.dev.dependencies]
 pytest-cov = "^4.0.0"
 blue = "^0.9.1"
 isort = "^5.12.0"
 mypy = "^1.0.1"
 taskipy = "^1.10.3"
-
 
 [tool.poetry.group.doc.dependencies]
 mkdocs-material = "^9.1.0"
@@ -41,3 +39,24 @@ markers = [
   "fasttest: marks tests as fasttest (deselect with '-m \"not fasttest\"')",
 ]
 
+[tool.coverage.html]
+directory = "coverage_report/html"
+
+[tool.coverage.run]
+omit = [
+  # omit anything in a .local directory anywhere
+  "*/.local/*",
+  # omit everything in /usr
+  "/usr/*",
+  # omit this single file
+  "configure/truncus.py",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+  "pragma: no cover",
+  "if __name__ == .__main__.:",
+  "__package__ =",
+  "__author__",
+  "def run",
+]
