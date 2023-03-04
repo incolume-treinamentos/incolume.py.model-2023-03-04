@@ -10,6 +10,13 @@ packages = [{include = "incolume"}]
 python = "^3.10"
 
 
+[tool.poetry.group.dev.dependencies]
+pytest-cov = "^4.0.0"
+blue = "^0.9.1"
+isort = "^5.12.0"
+mypy = "^1.0.1"
+taskipy = "^1.10.3"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
