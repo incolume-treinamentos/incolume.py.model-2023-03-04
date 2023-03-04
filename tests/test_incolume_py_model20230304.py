@@ -9,6 +9,7 @@ class TestCase:
         'entrance expected'.split(),
         (
             (__version__, True),
+            ('1.0.0-alpha.0', True),
         )
     )
     def test_version(self, entrance, expected):
