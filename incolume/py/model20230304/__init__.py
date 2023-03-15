@@ -1,6 +1,7 @@
-from pathlib import Path
-from tomli import load
 import logging
+from pathlib import Path
+
+from tomli import load
 
 versionfile = Path(__file__).parent / 'version.txt'
 configfile = Path(__file__).parents[3] / 'pyproject.toml'
