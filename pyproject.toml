@@ -26,6 +26,7 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.pytest.ini_options]
+pythonpath = "."
 #log_format = '%(asctime)s %(levelname)s %(message)s'
 log_format = '%(asctime)s; %(levelname)-8s; %(name)s; %(module)s; %(funcName)s; %(message)s'
 log_date_format ='%FT%T%z'
