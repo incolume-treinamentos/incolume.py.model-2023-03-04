@@ -71,10 +71,10 @@ clean = { cmd = "echo -n 'Starting cleanning environment..'; find ./ \\( -name '
 docs = {help="Generate documentation", cmd="poetry run mkdocs serve"}
 isort = { help = "Apply code style isort format", cmd = 'poetry run isort $(DIRECTORIES) && git commit -m "style(lint): Applied Code style isort automaticly at `date +"%FT%T%z"`" . || echo ">>>  Checked code style isort format automaticly  <<<"'}
 lint = { cmd = "poetry run blue --check --diff . && poetry run isort --check --diff .",   help = "confirms code style using selected tools." }
-patch = {help='Update patch version', cmd='v=$(poetry version patch); pytest tests/ && git ci -m "$v" pyproject.toml `find incolume* -name version.txt`'}
-premajor = {help='Update premajor version', cmd='v=$(poetry version premajor); pytest tests/ && git ci -m "$v" pyproject.toml `find incolume* -name version.txt`'}
-preminor = {help='Update preminor version', cmd='v=$(poetry version preminor); pytest tests/ && git ci -m "$v" pyproject.toml `find incolume* -name version.txt`'}
-prerelease = {help='Update prerelease version', cmd='v=$(poetry version prerelease); pytest tests/ && git ci -m "$v" pyproject.toml `find incolume* -name version.txt`'}
+patch = {help='Update patch version', cmd='v=$(poetry version patch) && poetry run task test && git ci -m "$v" pyproject.toml `find incolume* -name version.txt`'}
+premajor = {help='Update premajor version', cmd='v=$(poetry version premajor) && poetry run task test && git ci -m "$v" pyproject.toml `find incolume* -name version.txt`'}
+preminor = {help='Update preminor version', cmd='v=$(poetry version preminor) && poetry run task test && git ci -m "$v" pyproject.toml `find incolume* -name version.txt`'}
+prerelease = {help='Update prerelease version', cmd='V=$(poetry version prerelease) && poetry run task test && git ci -m "${V}" pyproject.toml `find incolume* -name version.txt`'}
 setup = {help='Configure development environment.', cmd='poetry install'}
 pre_test = "poetry run task lint"
 test = { cmd = "poetry run pytest -vv --cov-report html:coverage_report/html --cov-report xml:coverage_report/xml/cov.xml", help = "runs all unit tests and geranerate coverage report." }

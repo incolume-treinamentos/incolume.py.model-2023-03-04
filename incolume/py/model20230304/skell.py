@@ -11,10 +11,10 @@ def skell(
     args:
         args: Argumentos.
         kwargs: Argumentos chaveados.
-    
+
     returns:
         Um dicionário com os argumentos de entrada.
-    
+
     Examples:
         >>> skell(1, 2, 3)
         {'args': (1, 2, 3)}
