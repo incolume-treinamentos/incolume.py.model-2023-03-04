@@ -1,6 +1,9 @@
-import pytest
-from incolume.py.model20230304 import __version__
 import re
+
+import pytest
+
+from incolume.py.model20230304 import __version__
+
 __author__ = '@britodfbr'  # pragma: no cover
 
 
@@ -10,8 +13,11 @@ class TestCase:
         (
             (__version__, True),
             ('1.0.0-alpha.0', True),
-        )
+        ),
     )
     def test_version(self, entrance, expected):
         """Validação de versionamento semântico."""
-        assert bool(re.fullmatch(r"\d+(\.\d+){2}(-?\w+\.?\d+)?", entrance, re.I)) == expected
+        assert (
+            bool(re.fullmatch(r'\d+(\.\d+){2}(-?\w+\.?\d+)?', entrance, re.I))
+            == expected
+        )

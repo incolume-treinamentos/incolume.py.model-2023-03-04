@@ -29,7 +29,7 @@ build-backend = "poetry.core.masonry.api"
 #log_format = '%(asctime)s %(levelname)s %(message)s'
 log_format = '%(asctime)s; %(levelname)-8s; %(name)s; %(module)s; %(funcName)s; %(message)s'
 log_date_format ='%FT%T%z'
-addopts = "--cov=incolume"
+addopts = "-vsx --doctest-modules --cov=incolume"
 testpaths = [
   "tests",
 ]
@@ -61,12 +61,20 @@ exclude_lines = [
   "def run",
 ]
 
+[tool.isort]
+profile = "black"
+line_length = 79
+
 [tool.taskipy.tasks]
 clean = { cmd = "echo -n 'Starting cleanning environment..'; find ./ \\( -name '*.pyc' -o -name '*~' -o -name '*.log' -o -name '*.log.*' -o -name '.cache' \\) -delete ; echo ' ok' ",  help = "Shallow clean into environment (.pyc, .cache, .egg, .log, et all)" }
+docs = {help="Generate documentation", cmd="poetry run mkdocs serve"}
 isort = { help = "Apply code style isort format", cmd = 'poetry run isort $(DIRECTORIES) && git commit -m "style(lint): Applied Code style isort automaticly at `date +"%FT%T%z"`" . || echo ">>>  Checked code style isort format automaticly  <<<"'}
-lint = { cmd = "pylint tests taskipy",   help = "confirms code style using pylint" }
+lint = { cmd = "poetry run blue --check --diff . && poetry run isort --check --diff .",   help = "confirms code style using selected tools." }
 patch = {help='Update patch version', cmd='v=$(poetry version patch); pytest tests/ && git ci -m "$v" pyproject.toml `find incolume* -name version.txt`'}
 premajor = {help='Update premajor version', cmd='v=$(poetry version premajor); pytest tests/ && git ci -m "$v" pyproject.toml `find incolume* -name version.txt`'}
 preminor = {help='Update preminor version', cmd='v=$(poetry version preminor); pytest tests/ && git ci -m "$v" pyproject.toml `find incolume* -name version.txt`'}
 prerelease = {help='Update prerelease version', cmd='v=$(poetry version prerelease); pytest tests/ && git ci -m "$v" pyproject.toml `find incolume* -name version.txt`'}
-test = { cmd = "poetry run pytest -xv --cov-report html:coverage_report/html --cov-report xml:coverage_report/xml/cov.xml", help = "runs all unit tests and geranerate coverage report." }
+setup = {help='Configure development environment.', cmd='poetry install'}
+pre_test = "poetry run task lint"
+test = { cmd = "poetry run pytest -vv --cov-report html:coverage_report/html --cov-report xml:coverage_report/xml/cov.xml", help = "runs all unit tests and geranerate coverage report." }
+post_test = ''
