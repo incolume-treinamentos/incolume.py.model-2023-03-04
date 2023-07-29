@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "incolume-py-model20230304"
-version = "0.1.0"
+version = "1.0.0"
 description = ""
 authors = ["Britodfbr <britodfbr@gmail.com>"]
 readme = "README.md"
@@ -9,7 +9,64 @@ packages = [{include = "incolume"}]
 [tool.poetry.dependencies]
 python = "^3.10"
 
+[tool.poetry.group.dev.dependencies]
+pytest-cov = "^4.0.0"
+blue = "^0.9.1"
+isort = "^5.12.0"
+mypy = "^1.0.1"
+taskipy = "^1.10.3"
+
+[tool.poetry.group.doc.dependencies]
+mkdocs-material = "^9.1.0"
+mkdocstrings = "^0.20.0"
+mkdocstrings-python = "^0.8.3"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+#log_format = '%(asctime)s %(levelname)s %(message)s'
+log_format = '%(asctime)s; %(levelname)-8s; %(name)s; %(module)s; %(funcName)s; %(message)s'
+log_date_format ='%FT%T%z'
+addopts = "--cov=incolume"
+testpaths = [
+  "tests",
+]
+markers = [
+  "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+  "webtest: marks tests as webtest (deselect with '-m \"not webtest\"')",
+  "fasttest: marks tests as fasttest (deselect with '-m \"not fasttest\"')",
+]
+
+[tool.coverage.html]
+directory = "coverage_report/html"
+
+[tool.coverage.run]
+omit = [
+  # omit anything in a .local directory anywhere
+  "*/.local/*",
+  # omit everything in /usr
+  "/usr/*",
+  # omit this single file
+  "configure/truncus.py",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+  "pragma: no cover",
+  "if __name__ == .__main__.:",
+  "__package__ =",
+  "__author__",
+  "def run",
+]
+
+[tool.taskipy.tasks]
+clean = { cmd = "echo -n 'Starting cleanning environment..'; find ./ \\( -name '*.pyc' -o -name '*~' -o -name '*.log' -o -name '*.log.*' -o -name '.cache' \\) -delete ; echo ' ok' ",  help = "Shallow clean into environment (.pyc, .cache, .egg, .log, et all)" }
+isort = { help = "Apply code style isort format", cmd = 'poetry run isort $(DIRECTORIES) && git commit -m "style(lint): Applied Code style isort automaticly at `date +"%FT%T%z"`" . || echo ">>>  Checked code style isort format automaticly  <<<"'}
+lint = { cmd = "pylint tests taskipy",   help = "confirms code style using pylint" }
+patch = {help='Update patch version', cmd='v=$(poetry version patch); pytest tests/ && git ci -m "$v" pyproject.toml `find incolume* -name version.txt`'}
+premajor = {help='Update premajor version', cmd='v=$(poetry version premajor); pytest tests/ && git ci -m "$v" pyproject.toml `find incolume* -name version.txt`'}
+preminor = {help='Update preminor version', cmd='v=$(poetry version preminor); pytest tests/ && git ci -m "$v" pyproject.toml `find incolume* -name version.txt`'}
+prerelease = {help='Update prerelease version', cmd='v=$(poetry version prerelease); pytest tests/ && git ci -m "$v" pyproject.toml `find incolume* -name version.txt`'}
+test = { cmd = "poetry run pytest -xv --cov-report html:coverage_report/html --cov-report xml:coverage_report/xml/cov.xml", help = "runs all unit tests and geranerate coverage report." }
